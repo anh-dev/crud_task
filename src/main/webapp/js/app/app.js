@@ -1,4 +1,4 @@
-var app = angular.module('crudApp', ['ui.router', 'ngStorage']);
+var app = angular.module('crudApp', ['ui.router', 'ngStorage', 'angularUtils.directives.dirPagination']);
 
 app.constant('urls', {
     BASE: 'http://localhost:8080/',

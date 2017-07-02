@@ -3,6 +3,12 @@
 angular.module('crudApp').controller('UserController',
     ['UserService', '$scope', function (UserService, $scope) {
 
+        $scope.sort = function (keyname) {
+            $scope.sortKey = keyname;
+            $scope.reverse = !$scope.reverse;
+        };
+
+
         var self = this;
         self.user = {};
         self.users = [];

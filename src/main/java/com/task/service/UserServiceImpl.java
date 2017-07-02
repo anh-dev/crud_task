@@ -5,6 +5,7 @@ import com.task.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -25,16 +26,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public User create(User instance) {
 
-        return null;
+        instance.setCreatedDate(LocalDateTime.now());
+
+        return userRepository.save(instance);
     }
 
     @Override
     public User update(User instance) {
-        return null;
+
+
+        return userRepository.save(instance);
     }
 
     @Override
     public void delete(Integer id) {
         userRepository.delete(id);
+    }
+
+    @Override
+    public boolean isUserExist(User user) {
+        return userRepository.findByName(user.getName()) != null;
     }
 }

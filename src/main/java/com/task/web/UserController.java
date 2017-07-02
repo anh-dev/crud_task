@@ -21,19 +21,18 @@ public class UserController {
     private UserService userService;
 
 
-    // -------------------Retrieve All Users---------------------------------------------
+
 
     @RequestMapping(value = "/user/", method = RequestMethod.GET)
     public ResponseEntity<List<User>> listAllUsers() {
         List<User> users = userService.getAll();
         if (users.isEmpty()) {
             return new ResponseEntity(HttpStatus.NO_CONTENT);
-            // You many decide to return HttpStatus.NOT_FOUND
+
         }
         return new ResponseEntity<List<User>>(users, HttpStatus.OK);
     }
 
-    // -------------------Retrieve Single User------------------------------------------
 
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> getUser(@PathVariable("id") int id) {
@@ -47,17 +46,16 @@ public class UserController {
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }
 
-    // -------------------Create a User-------------------------------------------
 
     @RequestMapping(value = "/user/", method = RequestMethod.POST)
     public ResponseEntity<?> createUser(@RequestBody User user, UriComponentsBuilder ucBuilder) {
 
 
-//        if (userService.isUserExist(user)) {
-//
-//            return new ResponseEntity(new CustomErrorType("Unable to create. A User with name " +
-//                    user.getName() + " already exist."),HttpStatus.CONFLICT);
-//        }
+        if (userService.isUserExist(user)) {
+
+            return new ResponseEntity(new CustomErrorType("Unable to create. A User with name " +
+                    user.getName() + " already exist."), HttpStatus.CONFLICT);
+        }
         userService.create(user);
 
         HttpHeaders headers = new HttpHeaders();
@@ -65,7 +63,6 @@ public class UserController {
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
 
-    // ------------------- Update a User ------------------------------------------------
 
     @RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
     public ResponseEntity<?> updateUser(@PathVariable("id") int id, @RequestBody User user) {
@@ -81,13 +78,12 @@ public class UserController {
 
         currentUser.setName(user.getName());
         currentUser.setAge(user.getAge());
-//        currentUser.setSalary(user.getSalary());
+        currentUser.setAdmin(user.isAdmin());
 
         userService.update(currentUser);
         return new ResponseEntity<User>(currentUser, HttpStatus.OK);
     }
 
-    // ------------------- Delete a User-----------------------------------------
 
     @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteUser(@PathVariable("id") int id) {
@@ -99,16 +95,6 @@ public class UserController {
                     HttpStatus.NOT_FOUND);
         }
         userService.delete(id);
-        return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
-    }
-
-    // ------------------- Delete All Users-----------------------------
-
-    @RequestMapping(value = "/user/", method = RequestMethod.DELETE)
-    public ResponseEntity<User> deleteAllUsers() {
-
-
-//        userService.deleteAllUsers();
         return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
     }
 

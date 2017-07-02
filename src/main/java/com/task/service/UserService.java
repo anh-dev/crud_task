@@ -16,4 +16,6 @@ public interface UserService {
     User update(User instance);
 
     void delete(Integer id);
+
+    boolean isUserExist(User user);
 }
